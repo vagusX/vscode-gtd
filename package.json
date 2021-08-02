@@ -1,5 +1,5 @@
 {
-  "name": "vscode-gtd",
+	"name": "vscode-gtd",
 	"displayName": "vscode-gtd",
 	"description": "gtd extension for vscode",
 	"version": "0.0.1",
@@ -10,7 +10,7 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:vscode-gtd.helloWorld"
+		"*"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -22,6 +22,7 @@
 		]
 	},
 	"scripts": {
+		"assets:dev": "cross-env TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack",
 		"vscode:prepublish": "yarn run compile",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
@@ -30,16 +31,30 @@
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.58.0",
 		"@types/glob": "^7.1.3",
 		"@types/mocha": "^8.2.2",
-		"@types/node": "14.x",
-		"eslint": "^7.27.0",
+		"@types/node": "^16.4.10",
+		"@types/react": "^17.0.15",
+		"@types/react-dom": "^17.0.9",
+		"@types/vscode": "^1.58.0",
+		"@types/webpack": "^5.28.0",
+		"@types/webpack-dev-server": "^3.11.5",
 		"@typescript-eslint/eslint-plugin": "^4.26.0",
 		"@typescript-eslint/parser": "^4.26.0",
+		"cross-env": "^7.0.3",
+		"eslint": "^7.27.0",
 		"glob": "^7.1.7",
 		"mocha": "^8.4.0",
-		"typescript": "^4.3.2",
-		"vscode-test": "^1.5.2"
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"ts-loader": "^9.2.4",
+		"ts-node": "^10.1.0",
+		"tsconfig-paths": "^3.10.1",
+		"tsconfig-paths-webpack-plugin": "^3.5.1",
+		"typescript": "^4.3.5",
+		"vscode-test": "^1.5.2",
+		"webpack": "^5.48.0",
+		"webpack-cli": "^4.7.2",
+		"webpack-dev-server": "^3.11.2"
 	}
 }

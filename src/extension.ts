@@ -40,7 +40,7 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
 		enableScripts: true,
 
 		// And restrict the webview to only loading content from our extension's `media` directory.
-		localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'media')]
+		localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'dist')]
 	};
 }
 
@@ -168,10 +168,15 @@ class CatCodingPanel {
 
 	private _getHtmlForWebview(webview: vscode.Webview, catGifPath: string) {
 		// Local path to main script run in the webview
-		const scriptPathOnDisk = vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js');
+		const scriptPathOnDisk = vscode.Uri.joinPath(this._extensionUri, 'dist', 'bundle.js');
 
 		// And the uri we use to load this script in the webview
 		const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
+
+		
+		const uriTest = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'main-42b4219-wps-hmr.json')).toString();
+
+		// const scriptUri = webview.asWebviewUri(vscode.Uri.parse('http://127.0.0.1:8080/bundle.js'));
 
 		// Local path to css styles
 		const styleResetPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css');
@@ -184,6 +189,10 @@ class CatCodingPanel {
 		// Use a nonce to only allow specific scripts to be run
 		const nonce = getNonce();
 
+		const webpackPublicPath = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist'));
+
+		// <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; img-src ${webview.cspSource} https:; script-src 'unsafe-eval';">
+
 		return `<!DOCTYPE html>
 			<html lang="en">
 			<head>
@@ -193,20 +202,40 @@ class CatCodingPanel {
 					Use a content security policy to only allow loading images from https or from our extension directory,
 					and only allow scripts that have a specific nonce.
 				-->
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}';">
-
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-				<link href="${stylesResetUri}" rel="stylesheet">
-				<link href="${stylesMainUri}" rel="stylesheet">
 
 				<title>Cat Coding</title>
 			</head>
 			<body>
 				<img src="${catGifPath}" width="300" />
 				<h1 id="lines-of-code-counter">0</h1>
+				<div id="app"></div>
+				<script src="${scriptUri}"></script>
+				<script>
+					console.log(__webpack_require__, '__webpack_require__');
+					__webpack_public_path__ = "${webpackPublicPath}";
 
-				<script nonce="${nonce}" src="${scriptUri}"></script>
+					__webpack_require__.hmrM = () => {
+						if (typeof fetch === "undefined")
+							throw new Error("No browser support: need fetch API");
+						return fetch(__webpack_public_path__ + __webpack_require__.p + __webpack_require__.hmrF()).then(
+							(response) => {
+								if (response.status === 404) return; // no update available
+								if (!response.ok)
+									throw new Error(
+										"Failed to fetch update manifest " + response.statusText
+									);
+								return response.json();
+							}
+						);
+					};
+
+					var originLoad = __webpack_require__.l.bind(__webpack_require__);
+						__webpack_require__.l = (url, done, key, chunkId) => {
+							var newUrl = __webpack_public_path__ + url;
+							originLoad(newUrl, done, key, chunkId);
+					};
+				</script>
 			</body>
 			</html>`;
 	}

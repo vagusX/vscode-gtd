@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./assets",
+    "outDir": "../dist/",
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ESNext",
+    "sourceMap": true
+  },
+  "include": ["src"]
+}

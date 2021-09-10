@@ -1,5 +1,4 @@
 const path = require('path');
-const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const ReactRefreshTypeScript = require('react-refresh-typescript');
@@ -10,7 +9,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 const outputPath = path.resolve(__dirname, 'dist');
 
 module.exports = {
-  watch: true,
+  watch: isDevelopment,
   mode: 'development',
   cache: {
     type: 'filesystem',
@@ -18,7 +17,7 @@ module.exports = {
   },
   entry: [
     'webpack-plugin-serve/client',
-    './assets/main.tsx'
+    './web/main.tsx'
   ],
   output: {
     iife: false,
@@ -41,19 +40,17 @@ module.exports = {
         compilerOptions: {
           jsx: 'react-jsxdev',
         },
-        transpileOnly: true,
         getCustomTransformers: () => ({
           before: isDevelopment ? [ReactRefreshTypeScript()] : [],
         }),
         // `ts-loader` does not work with HMR unless `transpileOnly` is used.
         // If you need type checking, `ForkTsCheckerWebpackPlugin` is an alternative.
-        transpileOnly: isDevelopment,
+        transpileOnly: true,
       },
     }],
   },
   plugins: isDevelopment ? [
     // ... other plugins
-    // new webpack.HotModuleReplacementPlugin(),
     new WebpackPluginServe({
       host: '127.0.0.1',
       port: 8080,

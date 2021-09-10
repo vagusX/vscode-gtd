@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "./assets",
+    "baseUrl": "./web",
     "outDir": "../dist/",
     "noImplicitAny": true,
     "esModuleInterop": true,
@@ -11,5 +11,5 @@
     "target": "ESNext",
     "sourceMap": true
   },
-  "include": ["src"]
+  "include": ["web"]
 }

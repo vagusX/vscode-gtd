@@ -216,25 +216,30 @@ class CatCodingPanel {
 					__webpack_public_path__ = "${webpackPublicPath}";
 
 					__webpack_require__.hmrM = () => {
-						if (typeof fetch === "undefined")
+						if (typeof fetch === "undefined") {
 							throw new Error("No browser support: need fetch API");
-						return fetch(__webpack_public_path__ + __webpack_require__.p + __webpack_require__.hmrF()).then(
-							(response) => {
-								if (response.status === 404) return; // no update available
-								if (!response.ok)
-									throw new Error(
-										"Failed to fetch update manifest " + response.statusText
-									);
-								return response.json();
+						}
+						// prefix with \`__webpack_public_path__\`
+						return fetch(
+							__webpack_public_path__ + __webpack_require__.p + __webpack_require__.hmrF()
+						).then((response) => {
+							if (response.status === 404) {
+								return; // no update available
 							}
-						);
+							if (!response.ok) {
+								throw new Error("Failed to fetch update manifest " + response.statusText);
+							}
+							return response.json();
+						});
 					};
-
+					
 					var originLoad = __webpack_require__.l.bind(__webpack_require__);
-						__webpack_require__.l = (url, done, key, chunkId) => {
-							var newUrl = __webpack_public_path__ + url;
-							originLoad(newUrl, done, key, chunkId);
-					};
+					/* webpack/runtime/load script */
+					__webpack_require__.l = (url, done, key, chunkId) => {
+						// prefix with \`__webpack_public_path__\`
+						var newUrl = __webpack_public_path__ + url;
+						originLoad(newUrl, done, key, chunkId);
+					};					
 				</script>
 			</body>
 			</html>`;

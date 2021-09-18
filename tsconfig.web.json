@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "./web",
-    "outDir": "../dist/",
+    "outDir": "./dist",
     "noImplicitAny": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",

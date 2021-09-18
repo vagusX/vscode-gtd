@@ -232,7 +232,7 @@ class CatCodingPanel {
 							return response.json();
 						});
 					};
-					
+
 					var originLoad = __webpack_require__.l.bind(__webpack_require__);
 					/* webpack/runtime/load script */
 					__webpack_require__.l = (url, done, key, chunkId) => {

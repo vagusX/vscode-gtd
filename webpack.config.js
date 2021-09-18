@@ -28,7 +28,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],
     plugins: [new TsconfigPathsPlugin({
-      configFile: path.resolve(__dirname, './tsconfig.assets.json'),
+      configFile: path.resolve(__dirname, './tsconfig.web.json'),
     })],
   },
   module: {
@@ -36,7 +36,7 @@ module.exports = {
       test: /\.tsx?$/,
       loader: 'ts-loader',
       options: {
-        configFile: path.resolve(__dirname, './tsconfig.assets.json'),
+        configFile: path.resolve(__dirname, './tsconfig.web.json'),
         compilerOptions: {
           jsx: 'react-jsxdev',
         },
